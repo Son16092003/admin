@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import Link from "next/link";
 import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import "../../styles/navbar.css";
 
 const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -19,24 +20,23 @@ const Navbar: React.FC = () => {
   const isOpen = Boolean(anchorEl);
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#011F82" }}>
-      <Toolbar>
-        <MenuIcon sx={{ mr: 2 }} />
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          <Link href="/" passHref style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}>
+    <AppBar position="static" className="navbar">
+      <Toolbar className="navbar-toolbar">
+        <MenuIcon className="navbar-menu-icon" />
+        <Typography variant="h6">
+          <Link href="/" passHref className="navbar-logo">
             Admin Dashboard
           </Link>
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box className="navbar-buttons">
           <Button
-            color="inherit"
+            className="navbar-button"
+            style={{ color: "black", fontWeight: "bold" }}
             onClick={handleClick}
-            sx={{ color: "white", textTransform: "none" }}
           >
             Thống kê
           </Button>
 
-          {/* Menu xổ xuống */}
           <Menu
             anchorEl={anchorEl}
             open={isOpen}
@@ -46,17 +46,17 @@ const Navbar: React.FC = () => {
             }}
           >
             <MenuItem>
-              <Link href="/user" passHref style={{ textDecoration: "none", color: "black" }}>
+              <Link href="/pages/user" passHref className="navbar-menu-item">
                 Các tài khoản đăng nhập
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href="/companies" passHref style={{ textDecoration: "none", color: "black" }}>
+              <Link href="/pages/companies" passHref className="navbar-menu-item">
                 Các công ty đã tạo
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href="/cv_apply" passHref style={{ textDecoration: "none", color: "black" }}>
+              <Link href="/pages/cv_apply" passHref style={{ textDecoration: "none", color: "black" }}>
                 Các CV đã apply
               </Link>
             </MenuItem>
