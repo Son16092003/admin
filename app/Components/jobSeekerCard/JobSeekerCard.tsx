@@ -1,8 +1,5 @@
-// components/JobSeekerCard.tsx
-
 import React from "react";
-import "../styles/jobseekers.css";
-
+import "../../styles/jobseekers.css";
 interface Address {
   country: string;
   address: string;
@@ -77,9 +74,9 @@ const JobSeekerCard: React.FC<JobSeekerCardProps> = ({ data }) => {
       {/* Kinh nghiệm làm việc */}
       <div>
         <h3><strong>Kinh nghiệm làm việc</strong></h3>
-        <p><strong>Công ty:</strong> {data.experience.companyName}</p>
-        <p><strong>Chức vụ:</strong> {data.experience.jobTitle}</p>
-        <p><strong>Lĩnh vực:</strong> {data.experience.workExperience}</p>
+        <p><strong>Công ty:</strong> {data.experience.companyName || "Chưa có"}</p>
+        <p><strong>Chức vụ:</strong> {data.experience.jobTitle || "Chưa có"}</p>
+        <p><strong>Lĩnh vực:</strong> {data.experience.workExperience || "Chưa có"}</p>
         <p><strong>Địa chỉ công ty:</strong> {data.experience.workCountry}, {data.experience.workCity}</p>
       </div>
 
@@ -94,11 +91,21 @@ const JobSeekerCard: React.FC<JobSeekerCardProps> = ({ data }) => {
       {/* Kỹ năng */}
       <div>
         <h3><strong>Kỹ năng</strong></h3>
-        {data.skills.map((skill, index) => (
-          <span key={index} className="skill-tag">
-            {skill}
-          </span>
-        ))}
+        {data.skills.length > 0 ? (
+          data.skills.map((skill, index) => (
+            <span key={index} className="skill-tag">
+              {skill}
+            </span>
+          ))
+        ) : (
+          <p>Chưa có kỹ năng</p>
+        )}
+      </div>
+      
+      {/* Chứng chỉ */}
+      <div>
+        <h3><strong>Chứng chỉ</strong></h3>
+        <p>{data.certifications || "Chưa có chứng chỉ"}</p>
       </div>
     </div>
   );

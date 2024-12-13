@@ -1,0 +1,56 @@
+.navbar {
+    background-color: #011f82; /* Màu nền */
+    box-shadow: none;
+    border-bottom: 2px solid #ffc107; /* Đường viền vàng ở dưới */
+  }
+  
+  .navbar-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+  }
+  
+  .navbar-logo {
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .navbar-menu-icon {
+    color: #ffc107; /* Màu vàng cho icon */
+    margin-right: 16px;
+  }
+  
+  .navbar-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Khoảng cách giữa các nút */
+  }
+  
+  .navbar-button {
+    background-color: aqua;
+    color: white;
+    text-transform: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+  
+  .navbar-button:hover {
+    background-color: #ffc107; /* Màu vàng khi hover */
+    color: black;
+  }
+  
+  .navbar-menu-item {
+    text-decoration: none;
+    color: black;
+    padding: 8px 16px;
+    display: block;
+  }
+  
+  .navbar-menu-item:hover {
+    background-color: #f0f0f0;
+  }
+  

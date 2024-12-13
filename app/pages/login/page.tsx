@@ -3,8 +3,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../styles/login.css';
-import { useRouter } from 'next/navigation'; // Next.js Router
-import router from 'next/router';
+import { useRouter } from 'next/navigation'; // Đúng module cho App Router
 
 type LoginFormInputs = {
   username: string;
@@ -13,11 +12,13 @@ type LoginFormInputs = {
 
 export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+  const router = useRouter(); // Lấy instance của useRouter
 
   const onSubmit = (data: LoginFormInputs) => {
     if (data.username === 'admin' && data.password === 'admin') {
       console.log('Đăng nhập thành công');
-      router.push('/'); // Điều hướng đến trang quản lý người dùng
+      localStorage.setItem("isAuthenticated", "true"); // Set authentication status
+      router.push('/admin'); // Điều hướng đến trang Admin
     } else {
       alert('Sai tên đăng nhập hoặc mật khẩu');
     }
