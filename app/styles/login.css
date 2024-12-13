@@ -1,0 +1,104 @@
+/* Reset body */
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* Container chính */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    margin: 1rem;
+  }
+  
+  /* Tiêu đề login */
+  .login-form h1 {
+    font-weight: bold;
+    font-size: 2rem;
+    color: #6d5afc;
+    text-align: center;
+  }
+  
+  /* Phần Username và Password */
+  .main {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .userName,
+  .password {
+    margin-bottom: 1.5rem;
+    
+  }
+  
+  /* Input fields */
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Placeholder text */
+  input[type="text"]::placeholder,
+  input[type="password"]::placeholder {
+    color: #aaa;
+  }
+  
+  /* Input focus effect */
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(128, 99, 255, 0.3);
+  }
+  
+  /* Button Đăng nhập */
+  button {
+    padding: 14px;
+    font-weight: bold;
+    background: #6d5afc;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  /* Hiệu ứng hover */
+  button:hover {
+    background: #987ef9;
+  }
+  
+  /* Hiệu ứng focus trên button */
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 12px rgba(128, 99, 255, 0.4);
+  }
+  
+  /* Error text */
+  p {
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 14px;
+    text-align: center;
+  }
+  
