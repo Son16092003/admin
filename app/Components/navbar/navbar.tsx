@@ -56,14 +56,14 @@ const Navbar: React.FC = () => {
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href="/applied-cvs" passHref style={{ textDecoration: "none", color: "black" }}>
+              <Link href="/cv_apply" passHref style={{ textDecoration: "none", color: "black" }}>
                 Các CV đã apply
               </Link>
             </MenuItem>
           </Menu>
         </Box>
       </Toolbar>
-    </AppBar>
+    </AppBar> 
   );
 };
 
