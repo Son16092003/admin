@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from 'next/navigation';
 import { Box, Typography } from "@mui/material";
-import Navbar from './components/navbar/navbar';
+import Navbar from './Components/navbar/navbar';
 // import User from './User/page';
 
 

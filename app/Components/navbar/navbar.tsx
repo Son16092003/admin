@@ -46,24 +46,24 @@ const Navbar: React.FC = () => {
             }}
           >
             <MenuItem>
-              <Link href="/user" passHref className="navbar-menu-item">
+              <Link href="/pages/user" passHref className="navbar-menu-item">
                 Các tài khoản đăng nhập
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href="/companies" passHref className="navbar-menu-item">
+              <Link href="/pages/companies" passHref className="navbar-menu-item">
                 Các công ty đã tạo
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href="/applied-cvs" passHref className="navbar-menu-item">
+              <Link href="/pages/cv_apply" passHref style={{ textDecoration: "none", color: "black" }}>
                 Các CV đã apply
               </Link>
             </MenuItem>
           </Menu>
         </Box>
       </Toolbar>
-    </AppBar>
+    </AppBar> 
   );
 };
 

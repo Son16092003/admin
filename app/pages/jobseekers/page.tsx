@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import JobSeekerCard from "../../components/jobSeekerCard/JobSeekerCard";
+import JobSeekerCard from "../../Components/jobSeekerCard/JobSeekerCard";
 
 const JobSeekers = () => {
   const [jobSeekerData, setJobSeekerData] = useState<any>(null); // State để chứa dữ liệu job seeker
