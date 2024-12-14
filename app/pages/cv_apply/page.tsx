@@ -64,15 +64,22 @@ const CvApply: React.FC = () => {
         );
     }
 
-    // Thống kê theo trạng thái ứng viên
-    const statusCount = applications.reduce((acc, application) => {
-        acc[application.status] = (acc[application.status] || 0) + 1;
+    // Chuẩn hóa jobName trước khi thống kê
+    const normalizedApplications = applications.map((application) => ({
+        ...application,
+        jobName: application.jobName.trim().toLowerCase(), // Loại bỏ khoảng trắng thừa và chuyển về chữ thường
+    }));
+
+    // Thống kê jobCount dựa trên jobName đã chuẩn hóa
+    const jobCount = normalizedApplications.reduce((acc, application) => {
+        acc[application.jobName] = (acc[application.jobName] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
 
-    // Thống kê theo công việc
-    const jobCount = applications.reduce((acc, application) => {
-        acc[application.jobName] = (acc[application.jobName] || 0) + 1;
+
+    // Thống kê theo trạng thái ứng viên
+    const statusCount = applications.reduce((acc, application) => {
+        acc[application.status] = (acc[application.status] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
 
@@ -82,11 +89,16 @@ const CvApply: React.FC = () => {
         value: count,
     }));
 
+
+
     // Dữ liệu cho biểu đồ công việc
-    const jobData = Object.entries(jobCount).map(([job, count]) => ({
-        name: job,
-        value: count,
-    }));
+    const jobData = Object.entries(jobCount)
+        .sort(([jobA], [jobB]) => jobA.localeCompare(jobB)) // Sắp xếp theo tên công việc
+        .map(([job, count]) => ({
+            name: job,
+            value: count,
+        }));
+
 
     // Tính tỷ lệ phê duyệt
     const totalApplications = applications.length;
@@ -122,7 +134,7 @@ const CvApply: React.FC = () => {
 
                 {/* Thống kê công việc với biểu đồ cột */}
                 <Typography variant="h5" align="center" gutterBottom sx={{ marginTop: 4 }}>
-                    Applications per Job
+                    Bảng công việc
                 </Typography>
                 <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={jobData}>
@@ -136,11 +148,11 @@ const CvApply: React.FC = () => {
                 </ResponsiveContainer>
 
                 {/* Tỷ lệ phê duyệt */}
-                <Box sx={{ marginTop: 4 }} display="flex" justifyContent="center">
+                {/* <Box sx={{ marginTop: 4 }} display="flex" justifyContent="center">
                     <Typography variant="h5">
                         Approval Rate: {approvalRate.toFixed(2)}%
                     </Typography>
-                </Box>
+                </Box> */}
 
                 {/* Table */}
                 <TableContainer component={Paper} sx={{ marginTop: 4 }}>

@@ -22,7 +22,6 @@ const Navbar: React.FC = () => {
   return (
     <AppBar position="static" className="navbar">
       <Toolbar className="navbar-toolbar">
-        <MenuIcon className="navbar-menu-icon" />
         <Typography variant="h6">
           <Link href="/" passHref className="navbar-logo">
             Admin Dashboard
@@ -31,7 +30,7 @@ const Navbar: React.FC = () => {
         <Box className="navbar-buttons">
           <Button
             className="navbar-button"
-            style={{ color: "black", fontWeight: "bold" }}
+            style={{ color: "white", fontWeight: "bold" }}
             onClick={handleClick}
           >
             Thống kê
@@ -56,14 +55,14 @@ const Navbar: React.FC = () => {
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href="/pages/cv_apply" passHref style={{ textDecoration: "none", color: "black" }}>
+              <Link href="/pages/cv_apply" passHref className="navbar-menu-item">
                 Các CV đã apply
               </Link>
             </MenuItem>
           </Menu>
         </Box>
       </Toolbar>
-    </AppBar> 
+    </AppBar>
   );
 };
 

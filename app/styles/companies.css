@@ -1,0 +1,15 @@
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  th, td {
+    text-align: center;
+    padding: 10px;
+  }
+  

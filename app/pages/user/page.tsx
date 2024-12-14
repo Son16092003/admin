@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import "../../styles/user.css";
 import {
   Card,
   CardContent,
@@ -15,7 +16,14 @@ import {
   TableRow,
   Paper,
   Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";  // Import IconDelete
 
 interface User {
   userId: string;
@@ -28,7 +36,10 @@ interface User {
 const User: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [viewMode, setViewMode] = useState<"table" | "cards">("table"); // State cho chế độ xem
+  const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -46,6 +57,39 @@ const User: React.FC = () => {
     fetchUsers();
   }, []);
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Lọc người dùng theo tên
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/user/${userId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setUsers(users.filter(user => user.userId !== userId));
+        setOpenDialog(false);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
+  const openDeleteDialog = (user: User) => {
+    setUserToDelete(user);
+    setOpenDialog(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setUserToDelete(null);
+    setOpenDialog(false);
+  };
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
@@ -55,72 +99,64 @@ const User: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="container">
       <Typography variant="h4" align="center" gutterBottom>
-        Welcome to MyCV App
-      </Typography>
-      <Typography variant="h5" align="center" gutterBottom>
-        User List
+        Thống kê người dùng
       </Typography>
 
-      {/* Total Users Card */}
-      <Box
-        sx={{
-          backgroundColor: "#011F82",
-          padding: "10px",
-          borderRadius: "8px",
-          textAlign: "center",
-          marginBottom: "20px",
-          width: "150px",
-          height: "150px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
-          Total Users: {users.length}
+      {/* Tìm kiếm theo tên */}
+      <Box display="flex" justifyContent="center" marginBottom="20px">
+        <TextField
+          label="Tìm kiếm theo tên"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          fullWidth
+          sx={{ maxWidth: "400px" }}  // Gọn lại
+        />
+      </Box>
+
+      {/* Tổng số người dùng */}
+      <Box className="box-total-users" display="flex" justifyContent="center" marginBottom="20px">
+        <Typography variant="h6">
+          Tổng số người dùng: {filteredUsers.length}
         </Typography>
       </Box>
 
-      {/* Nút lựa chọn chế độ xem */}
-      <Box display="flex" justifyContent="center" marginBottom="20px">
+      {/* Chế độ xem */}
+      <Box className="view-mode-buttons" display="flex" justifyContent="center" marginBottom="20px">
         <Button
           variant={viewMode === "table" ? "contained" : "outlined"}
           color="primary"
           onClick={() => setViewMode("table")}
-          sx={{ marginRight: 2 }}
         >
-          View as Table
+          Xem theo bảng
         </Button>
         <Button
           variant={viewMode === "cards" ? "contained" : "outlined"}
           color="primary"
           onClick={() => setViewMode("cards")}
         >
-          View as Cards
+          Xem theo thẻ
         </Button>
       </Box>
 
-      {/* Hiển thị theo chế độ View Mode */}
+      {/* Hiển thị người dùng theo chế độ xem */}
       {viewMode === "table" ? (
-        // Bảng thống kê người dùng
-        <div>
-          <Typography variant="h5" align="center" gutterBottom sx={{ marginBottom: 2 }}>
-            User Statistics Table
-          </Typography>
+        <div className="table-container">
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell align="center">#</TableCell>
                   <TableCell align="center">Avatar</TableCell>
-                  <TableCell align="center">Name</TableCell>
+                  <TableCell align="center">Tên</TableCell>
                   <TableCell align="center">Email</TableCell>
+                  <TableCell align="center">Thao tác</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.map((user, index) => (
+                {filteredUsers.map((user, index) => (
                   <TableRow key={user.userId || index}>
                     <TableCell align="center">{index + 1}</TableCell>
                     <TableCell align="center">
@@ -130,8 +166,13 @@ const User: React.FC = () => {
                         style={{ width: "50px", borderRadius: "50%" }}
                       />
                     </TableCell>
-                    <TableCell align="center">{user.name}</TableCell>
+                    <TableCell align="center" >{user.name}</TableCell>
                     <TableCell align="center">{user.email}</TableCell>
+                    <TableCell align="center">
+                      <IconButton color="secondary" onClick={() => openDeleteDialog(user)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -139,31 +180,40 @@ const User: React.FC = () => {
           </TableContainer>
         </div>
       ) : (
-        // Dạng user card
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(400px, 2fr))",
-            gap: "16px",
-            justifyContent: "center",
-            marginTop: "30px",
-          }}
-        >
-          {users.map((user, index) => (
-            <Card key={user.userId || index} style={{ textAlign: "center" }}>
+        <div className="user-cards-container">
+          {filteredUsers.map((user, index) => (
+            <Card key={user.userId || index} className="card-user">
               <CardMedia component="img" height="120" image={user.avatar} alt={`${user.name}'s avatar`} />
-              <CardContent style={{ padding: "8px" }}>
-                <Typography variant="subtitle1" style={{ fontWeight: "bold", fontSize: "1rem", color: "blue" }}>
-                  {user.name}
-                </Typography>
-                <Typography variant="body1" color="text.secondary" style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                  Email: {user.email}
-                </Typography>
+              <CardContent className="card-content">
+                <Typography variant="subtitle1">{user.name}</Typography>
+                <Typography variant="body2">{user.email}</Typography>
+                <IconButton color="error" onClick={() => openDeleteDialog(user)}>
+                 <DeleteIcon /> 
+                </IconButton>
               </CardContent>
             </Card>
           ))}
         </div>
       )}
+
+      {/* Dialog Confirm Delete */}
+      <Dialog open={openDialog} onClose={closeDeleteDialog}>
+        <DialogTitle>Xác nhận xóa</DialogTitle>
+        <DialogContent>
+          <Typography>Bạn có chắc chắn muốn xóa người dùng này không?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog} color="primary">
+            Hủy
+          </Button>
+          <Button
+            onClick={() => userToDelete && handleDeleteUser(userToDelete.userId)}
+            color="secondary"
+          >
+            Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
