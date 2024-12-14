@@ -1,9 +1,8 @@
 .navbar {
-  background-color: #011f82; /* Màu nền */
+  background-color: #011f82;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ */
-  border-bottom: 2px solid #ffc107; /* Đường viền vàng ở dưới */
+  /* border-bottom: 2px solid #ffc107;  */
 }
-
 .navbar-toolbar {
   display: flex;
   justify-content: space-between;
@@ -31,7 +30,7 @@
 }
 
 .navbar-button {
-  background-color: #00bcd4; /* Màu nền nút thay đổi thành màu xanh */
+  background-color: #011f82; /* Màu nền nút thay đổi thành màu xanh */
   color: white;
   text-transform: none;
   font-size: 1rem;
@@ -42,8 +41,8 @@
 }
 
 .navbar-button:hover {
-  background-color: #ffc107; /* Màu vàng khi hover */
-  color: black;
+  background-color: #011f82; /* Màu vàng khi hover */
+  color: white;
   transform: scale(1.05); /* Hiệu ứng phóng to khi hover */
 }
 
@@ -57,6 +56,5 @@
 }
 
 .navbar-menu-item:hover {
-  background-color: #f0f0f0;
   color: #011f82; /* Thay đổi màu chữ khi hover */
 }

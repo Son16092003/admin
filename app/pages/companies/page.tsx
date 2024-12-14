@@ -98,13 +98,13 @@ const Companies: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">#</TableCell>
-              <TableCell align="center">Tên công ty</TableCell>
-              <TableCell align="center">Danh mục</TableCell>
-              <TableCell align="center">Số nhân viên</TableCell>
-              <TableCell align="center">Người liên hệ</TableCell>
-              <TableCell align="center">Số điện thoại</TableCell>
-              <TableCell align="center">Mô tả</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>#</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>Tên công ty</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>Danh mục</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>Số nhân viên</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>Người liên hệ</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>Số điện thoại</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>Mô tả</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
