@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 
 interface Employer {
-  _id: string;
   userId: string;
   selectedCompany: string; // Công ty thuộc danh mục
   companyName: string; // Tên công ty
@@ -109,7 +108,7 @@ const Companies: React.FC = () => {
           </TableHead>
           <TableBody>
             {filteredEmployers.map((employer, index) => (
-              <TableRow key={employer._id}>
+              <TableRow key={employer.userId}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{employer.companyName}</TableCell>
                 <TableCell align="center">{employer.selectedCompany}</TableCell>

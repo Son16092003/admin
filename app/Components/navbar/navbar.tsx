@@ -80,6 +80,13 @@ const Navbar: React.FC = () => {
                   Các CV đã apply
                 </Link>
               </MenuItem>
+
+              <MenuItem onClick={handleClose}>
+                <DescriptionIcon fontSize="small" style={{ marginRight: 8 }} />
+                <Link href="/pages/jobs_management" passHref className="navbar-menu-item">
+                  Các công việc đã tạo
+                </Link>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
