@@ -12,14 +12,21 @@ import {
     TableRow,
     Paper,
     Typography,
-    Button,
-    Grid,
-    AppBar,
-    Toolbar,
-    IconButton,
+    TextField,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+    PieChart,
+    Pie,
+    Cell,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+} from "recharts";
 
 interface Application {
     userId: string;
@@ -35,6 +42,10 @@ const CvApply: React.FC = () => {
     const [applications, setApplications] = useState<Application[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // State cho hai trường tìm kiếm
+    const [searchTermTable, setSearchTermTable] = useState<string>(""); // Search tên và công việc
+    const [searchTermChart, setSearchTermChart] = useState<string>(""); // Search phân phối công việc
+
     useEffect(() => {
         const fetchApplications = async () => {
             try {
@@ -42,7 +53,7 @@ const CvApply: React.FC = () => {
                 const data = await response.json();
                 setApplications(data);
             } catch (error) {
-                console.error("Error fetching applications:", error);
+                console.error("Lỗi khi tải danh sách ứng dụng:", error);
             } finally {
                 setLoading(false);
             }
@@ -64,68 +75,116 @@ const CvApply: React.FC = () => {
         );
     }
 
-    // Thống kê theo trạng thái ứng viên
+    const normalizedApplications = applications.map((application) => ({
+        ...application,
+        jobName: application.jobName.trim().toLowerCase(),
+    }));
+
+    const jobCount = normalizedApplications.reduce((acc, application) => {
+        acc[application.jobName] = (acc[application.jobName] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+
     const statusCount = applications.reduce((acc, application) => {
         acc[application.status] = (acc[application.status] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
 
-    // Thống kê theo công việc
-    const jobCount = applications.reduce((acc, application) => {
-        acc[application.jobName] = (acc[application.jobName] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
-
-    // Dữ liệu cho biểu đồ trạng thái
     const statusData = Object.entries(statusCount).map(([status, count]) => ({
         name: status,
         value: count,
     }));
 
-    // Dữ liệu cho biểu đồ công việc
-    const jobData = Object.entries(jobCount).map(([job, count]) => ({
-        name: job,
-        value: count,
-    }));
+    const jobData = Object.entries(jobCount)
+        .sort(([jobA], [jobB]) => jobA.localeCompare(jobB))
+        .map(([job, count]) => ({
+            name: job,
+            value: count,
+        }));
 
-    // Tính tỷ lệ phê duyệt
-    const totalApplications = applications.length;
-    const approvedCount = statusCount["Approved"] || 0;
-    const approvalRate = totalApplications > 0 ? (approvedCount / totalApplications) * 100 : 0;
+    // Lọc danh sách ứng dụng theo từ khóa trong bảng
+    const filteredApplications = applications.filter(
+        (application) =>
+            application.CVfullNameUser
+                .toLowerCase()
+                .includes(searchTermTable.toLowerCase()) ||
+            application.jobName.toLowerCase().includes(searchTermTable.toLowerCase())
+    );
+
+    // Lọc dữ liệu công việc theo từ khóa trong biểu đồ
+    const filteredJobData = jobData.filter((job) =>
+        job.name.toLowerCase().includes(searchTermChart.toLowerCase())
+    );
 
     return (
         <Box display="flex" flexDirection="column">
-            {/* Main Content */}
             <Box p={4} flexGrow={1}>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Applications
+                    Danh sách ứng dụng
                 </Typography>
 
-                {/* Tổng số ứng viên */}
-                <Typography variant="h6" align="center" gutterBottom sx={{ marginBottom: 2 }}>
-                    Total Applications: {totalApplications}
-                </Typography>
+                {/* Search 1: Tìm kiếm theo tên người dùng hoặc công việc */}
+                <Box display="flex" justifyContent="center" sx={{ marginBottom: 4 }}>
+                    <TextField
+                        label="Tìm kiếm trong bảng (Tên hoặc Công việc)"
+                        variant="outlined"
+                        value={searchTermTable}
+                        onChange={(e) => setSearchTermTable(e.target.value)}
+                        sx={{ width: "50%" }}
+                    />
+                </Box>
 
-                {/* Thống kê trạng thái với biểu đồ tròn */}
-                <Typography variant="h5" align="center" gutterBottom>
-                    Status Distribution
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                        <Pie data={statusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label>
-                            {statusData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={['#0088FE', '#00C49F', '#FFBB28'][index % 3]} />
+                <TableContainer component={Paper} sx={{ marginTop: 4 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="center" sx={{ fontWeight: 'bold' }}>#</TableCell>
+                                <TableCell align="center"sx={{ fontWeight: 'bold' }}>Tên người dùng</TableCell>
+                                <TableCell align="center"sx={{ fontWeight: 'bold' }}>Email</TableCell>
+                                <TableCell align="center"sx={{ fontWeight: 'bold' }}>Tên công việc</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {filteredApplications.map((application, index) => (
+                                <TableRow key={index}>
+                                    <TableCell align="center">{index + 1}</TableCell>
+                                    <TableCell align="center">
+                                        {application.CVfullNameUser}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {application.CVEmailUser || "N/A"}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {application.jobName}
+                                    </TableCell>
+
+                                </TableRow>
                             ))}
-                        </Pie>
-                    </PieChart>
-                </ResponsiveContainer>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
 
-                {/* Thống kê công việc với biểu đồ cột */}
-                <Typography variant="h5" align="center" gutterBottom sx={{ marginTop: 4 }}>
-                    Applications per Job
+                {/* Search 2: Tìm kiếm phân phối công việc */}
+                <Box display="flex" justifyContent="center" sx={{ marginTop: 4 }}>
+                    <TextField
+                        label="Tìm kiếm trong Phân phối công việc"
+                        variant="outlined"
+                        value={searchTermChart}
+                        onChange={(e) => setSearchTermChart(e.target.value)}
+                        sx={{ width: "50%" }}
+                    />
+                </Box>
+
+                <Typography
+                    variant="h5"
+                    align="center"
+                    gutterBottom
+                    sx={{ marginTop: 4 }}
+                >
+                    Phân phối công việc
                 </Typography>
                 <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={jobData}>
+                    <BarChart data={filteredJobData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
@@ -135,38 +194,30 @@ const CvApply: React.FC = () => {
                     </BarChart>
                 </ResponsiveContainer>
 
-                {/* Tỷ lệ phê duyệt */}
-                <Box sx={{ marginTop: 4 }} display="flex" justifyContent="center">
-                    <Typography variant="h5">
-                        Approval Rate: {approvalRate.toFixed(2)}%
-                    </Typography>
-                </Box>
-
-                {/* Table */}
-                <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center">#</TableCell>
-                                <TableCell align="center">User Name</TableCell>
-                                <TableCell align="center">Email</TableCell>
-                                <TableCell align="center">Job Name</TableCell>
-                                <TableCell align="center">Status</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {applications.map((application, index) => (
-                                <TableRow key={index}>
-                                    <TableCell align="center">{index + 1}</TableCell>
-                                    <TableCell align="center">{application.CVfullNameUser}</TableCell>
-                                    <TableCell align="center">{application.CVEmailUser || "N/A"}</TableCell>
-                                    <TableCell align="center">{application.jobName}</TableCell>
-                                    <TableCell align="center">{application.status}</TableCell>
-                                </TableRow>
+                <Typography variant="h5" align="center" gutterBottom>
+                    Phân phối trạng thái
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                        <Pie
+                            data={statusData}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={80}
+                            fill="#8884d8"
+                            label
+                        >
+                            {statusData.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={["#0088FE", "#00C49F", "#FFBB28"][index % 3]}
+                                />
                             ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                        </Pie>
+                    </PieChart>
+                </ResponsiveContainer>
             </Box>
         </Box>
     );
