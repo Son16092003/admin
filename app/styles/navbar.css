@@ -1,56 +1,60 @@
 .navbar {
-    background-color: #011f82; /* Màu nền */
-    box-shadow: none;
-    border-bottom: 2px solid #ffc107; /* Đường viền vàng ở dưới */
-  }
-  
-  .navbar-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 16px;
-  }
-  
-  .navbar-logo {
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  .navbar-menu-icon {
-    color: #ffc107; /* Màu vàng cho icon */
-    margin-right: 16px;
-  }
-  
-  .navbar-buttons {
-    display: flex;
-    align-items: center;
-    gap: 16px; /* Khoảng cách giữa các nút */
-  }
-  
-  .navbar-button {
-    background-color: aqua;
-    color: white;
-    text-transform: none;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-  }
-  
-  .navbar-button:hover {
-    background-color: #ffc107; /* Màu vàng khi hover */
-    color: black;
-  }
-  
-  .navbar-menu-item {
-    text-decoration: none;
-    color: black;
-    padding: 8px 16px;
-    display: block;
-  }
-  
-  .navbar-menu-item:hover {
-    background-color: #f0f0f0;
-  }
-  
+  background-color: #011f82;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ */
+  /* border-bottom: 2px solid #ffc107;  */
+}
+.navbar-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px; /* Thêm một ít padding để không gian dễ chịu hơn */
+}
+
+.navbar-logo {
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.5rem; /* Tăng kích thước logo để nổi bật hơn */
+}
+
+.navbar-menu-icon {
+  color: #ffc107; /* Màu vàng cho icon */
+  margin-right: 16px;
+}
+
+.navbar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Khoảng cách giữa các nút */
+}
+
+.navbar-button {
+  background-color: #011f82; /* Màu nền nút thay đổi thành màu xanh */
+  color: white;
+  text-transform: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 16px; /* Thêm padding để nút dễ nhìn và dễ bấm hơn */
+  border-radius: 4px; /* Góc bo tròn để nút mềm mại hơn */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Thêm hiệu ứng khi hover */
+}
+
+.navbar-button:hover {
+  background-color: #011f82; /* Màu vàng khi hover */
+  color: white;
+  transform: scale(1.05); /* Hiệu ứng phóng to khi hover */
+}
+
+.navbar-menu-item {
+  text-decoration: none;
+  color: black;
+  padding: 8px 16px;
+  display: block;
+  border-radius: 4px; /* Thêm border-radius cho các item menu */
+  transition: background-color 0.3s ease;
+}
+
+.navbar-menu-item:hover {
+  color: #011f82; /* Thay đổi màu chữ khi hover */
+}
