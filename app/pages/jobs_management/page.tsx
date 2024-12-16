@@ -12,6 +12,7 @@ import {
     Chip,
     Collapse,
     IconButton,
+    TextField,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -38,8 +39,10 @@ interface Job {
 
 const JobsManagement: React.FC = () => {
     const [jobs, setJobs] = useState<Job[]>([]);
+    const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [expandedJob, setExpandedJob] = useState<number | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     useEffect(() => {
         const fetchJobs = async () => {
@@ -47,6 +50,7 @@ const JobsManagement: React.FC = () => {
                 const response = await fetch('http://localhost:3000/jobs');
                 const data = await response.json();
                 setJobs(data);
+                setFilteredJobs(data); // Set the initial jobs list
             } catch (error) {
                 console.error('Error fetching jobs:', error);
             } finally {
@@ -59,6 +63,18 @@ const JobsManagement: React.FC = () => {
 
     const handleExpandClick = (index: number) => {
         setExpandedJob((prev) => (prev === index ? null : index));
+    };
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const query = event.target.value;
+        setSearchQuery(query);
+
+        // Lọc công việc theo tên công ty (không phân biệt chữ hoa/thường)
+        const filtered = jobs.filter(
+            (job) =>
+                (job.companyName?.includes(query) || job.company?.includes(query)) // Kiểm tra tên công ty mà không thay đổi chữ hoa/thường
+        );
+        setFilteredJobs(filtered);
     };
 
     if (loading) {
@@ -74,8 +90,19 @@ const JobsManagement: React.FC = () => {
             <Typography variant="h4" align="center" gutterBottom>
                 Quản lý công việc
             </Typography>
+
+            {/* Search Box */}
+            <TextField
+                label="Tìm kiếm theo tên công ty"
+                variant="outlined"
+                fullWidth
+                value={searchQuery}
+                onChange={handleSearchChange}
+                sx={{ mb: 3 }}
+            />
+
             <Grid container spacing={3}>
-                {jobs.map((job, index) => (
+                {filteredJobs.map((job, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
                         <Card variant="outlined" sx={{ minHeight: 250 }}>
                             <CardHeader
