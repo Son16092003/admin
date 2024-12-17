@@ -1,66 +1,121 @@
-/* UserAccountManagement.css */
-
-/* Container for the CV list */
+/* Chỉnh lại container */
 .cv-container {
-  margin: 20px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* Nền trắng để dễ nhìn */
+  padding: 30px;
+  border-radius: 8px; /* Bo góc nhẹ nhàng */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ */
+  max-width: 1100px;
+  margin: 40px auto;
+  font-family: 'Roboto', sans-serif; /* Font chữ dễ đọc */
 }
 
-/* Title of the page */
-.cv-container h1 {
-  font-size: 24px;
-  color: #011F82;
-  margin-bottom: 20px;
+/* Tiêu đề */
+h1 {
   text-align: center;
+  font-size: 2rem;
+  color: #333; /* Màu chữ tối cho độ tương phản tốt */
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-/* Table styles */
+/* Thanh tìm kiếm */
+.search-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.MuiTextField-root {
+  background-color: #f1f1f1; /* Nền sáng nhẹ cho TextField */
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: none;
+  font-size: 1rem;
+}
+
+.MuiTextField-root input {
+  color: #555; /* Màu chữ dễ đọc */
+}
+
+.MuiButton-root {
+  background-color: #4CAF50; /* Xanh lá nhẹ */
+  color: white;
+  padding: 10px 18px;
+  font-size: 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.MuiButton-root:hover {
+  background-color: #45a049; /* Hiệu ứng màu nhẹ khi hover */
+}
+
+/* Bảng CV */
 .cv-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 30px;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .cv-table th, .cv-table td {
   padding: 12px;
   text-align: left;
-  border: 1px solid #B9D6F3;
+  font-size: 1rem;
+  border-bottom: 1px solid #e1e1e1; /* Đường viền nhẹ */
 }
 
 .cv-table th {
-  background-color: #011F82;
-  color: white;
-  font-size: 16px;
-}
-
-.cv-table td {
-  background-color: #fff;
+  background-color: #f4f4f4; /* Màu nền nhạt cho header */
   color: #333;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-/* Styling for each CV entry */
-.cv-card {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.cv-table tbody tr {
+  transition: background-color 0.3s ease;
 }
 
-.cv-card h2 {
-  font-size: 20px;
-  color: #011F82;
-  margin-bottom: 15px;
+.cv-table tbody tr:nth-child(even) {
+  background-color: #fafafa; /* Màu nền sáng cho dòng chẵn */
 }
 
-.cv-card p {
-  margin: 5px 0;
+.cv-table tbody tr:nth-child(odd) {
+  background-color: #ffffff; /* Màu nền sáng cho dòng lẻ */
 }
 
-p strong {
-  color: #011F82;
+.cv-table tbody tr:hover {
+  background-color: #e6f7e6; /* Màu nền nhẹ khi hover */
+  cursor: pointer;
+}
+
+/* Các cột trong bảng */
+.cv-table td {
+  color: #444; /* Màu chữ dễ nhìn */
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Thông báo không có CV */
+.cv-container p {
+  font-size: 1rem;
+  text-align: center;
+  color: #888; /* Màu nhẹ cho văn bản không có CV */
+  font-style: italic;
+  padding-top: 20px;
+}
+
+/* Loading */
+.MuiTypography-root {
+  font-size: 1.3rem;
+  color: #4CAF50; /* Xanh lá cho thông báo đang tải */
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 1px;
 }

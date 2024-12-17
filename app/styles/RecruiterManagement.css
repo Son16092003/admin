@@ -1,88 +1,85 @@
-/* RecruiterManagement.css */
-
-/* Container for the entire recruiter list */
+/* Container tổng */
 .recruiter-container {
-  margin: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  background-color: #ffffff;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
 }
 
-/* Title of the page */
+/* Tiêu đề chính */
 .recruiter-container h1 {
-  font-size: 24px;
-  color: #011F82;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #011F82; /* Màu chủ đạo */
   text-align: center;
+  margin-bottom: 20px;
 }
 
-/* Table styles */
+/* Thanh tìm kiếm */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #6D92D0;
+  border-radius: 5px;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 10px 20px;
+  background-color: #6D92D0;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+  /* font-weight: bold; */
+}
+
+.search-bar button:hover {
+  background-color: #6D92D0;
+}
+
+/* Bảng thông tin */
 .recruiter-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-}
-
-.recruiter-table th, .recruiter-table td {
-  padding: 12px;
-  text-align: left;
-  border: 1px solid #B9D6F3;
+  background-color: #ffffff;
 }
 
 .recruiter-table th {
   background-color: #011F82;
-  color: white;
-  font-size: 16px;
+  color: #ffffff;
+  text-align: left;
+  padding: 10px;
+  font-weight: bold;
 }
 
 .recruiter-table td {
-  background-color: #fff;
-  color: #333;
-}
-
-/* Styling for the recruiter card */
-.recruiter-card {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.recruiter-card h2 {
-  font-size: 20px;
-  color: #011F82;
-  margin-bottom: 15px;
-}
-
-.recruiter-details {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.section {
   padding: 10px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #dddddd;
 }
 
-.section-full {
-  grid-column: span 2;
-  padding: 10px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+.recruiter-table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
-.section p {
-  margin: 5px 0;
-  color: #333;
+.recruiter-table tr:hover {
+  background-color: #e6f2ff;
 }
 
-p strong {
-  color: #011F82;
+/* Thông báo không có dữ liệu */
+.no-data {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6D92D0;
+  margin-top: 20px;
 }
