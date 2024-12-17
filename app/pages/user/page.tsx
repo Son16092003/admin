@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "../../styles/user.css";
+import PersonIcon from "@mui/icons-material/Person"; // Import biểu tượng người dùng
+
 import {
   Card,
   CardContent,
@@ -117,11 +119,13 @@ const User: React.FC = () => {
       </Box>
 
       {/* Tổng số người dùng */}
-      <Box className="box-total-users" display="flex" justifyContent="center" marginBottom="20px">
-        <Typography variant="h6">
-          Tổng số người dùng: {filteredUsers.length}
-        </Typography>
+      <Box className="box-total-users">
+        <PersonIcon className="person-icon" />
+        <Typography className="user-count">{filteredUsers.length}</Typography>
+        <Typography className="user-text">Người dùng đăng nhập</Typography>
       </Box>
+
+
 
       {/* Chế độ xem */}
       <Box className="view-mode-buttons" display="flex" justifyContent="center" marginBottom="20px">
@@ -152,7 +156,7 @@ const User: React.FC = () => {
                   <TableCell align="center">Avatar</TableCell>
                   <TableCell align="center">Tên</TableCell>
                   <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">Thao tác</TableCell>
+                  {/* <TableCell align="center">Thao tác</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -163,15 +167,19 @@ const User: React.FC = () => {
                       <img
                         src={user.avatar}
                         alt={`${user.name}'s avatar`}
+                        onError={(e) => {
+                          e.currentTarget.src = "https://via.placeholder.com/50"; // Avatar mặc định
+                        }}
                         style={{ width: "50px", borderRadius: "50%" }}
                       />
+
                     </TableCell>
                     <TableCell align="center" >{user.name}</TableCell>
                     <TableCell align="center">{user.email}</TableCell>
                     <TableCell align="center">
-                      <IconButton color="secondary" onClick={() => openDeleteDialog(user)}>
+                      {/* <IconButton color="secondary" onClick={() => openDeleteDialog(user)}>
                         <DeleteIcon />
-                      </IconButton>
+                      </IconButton> */}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -183,13 +191,13 @@ const User: React.FC = () => {
         <div className="user-cards-container">
           {filteredUsers.map((user, index) => (
             <Card key={user.userId || index} className="card-user">
-              <CardMedia component="img" height="120" image={user.avatar} alt={`${user.name}'s avatar`} />
+              <CardMedia component="img" height="120" image={user.avatar || "https://via.placeholder.com/50"} alt={`${user.name}'s avatar`} />
               <CardContent className="card-content">
                 <Typography variant="subtitle1">{user.name}</Typography>
                 <Typography variant="body2">{user.email}</Typography>
-                <IconButton color="error" onClick={() => openDeleteDialog(user)}>
-                 <DeleteIcon /> 
-                </IconButton>
+                {/* <IconButton color="error" onClick={() => openDeleteDialog(user)}>
+                  <DeleteIcon />
+                </IconButton> */}
               </CardContent>
             </Card>
           ))}
@@ -197,7 +205,7 @@ const User: React.FC = () => {
       )}
 
       {/* Dialog Confirm Delete */}
-      <Dialog open={openDialog} onClose={closeDeleteDialog}>
+      {/* <Dialog open={openDialog} onClose={closeDeleteDialog}>
         <DialogTitle>Xác nhận xóa</DialogTitle>
         <DialogContent>
           <Typography>Bạn có chắc chắn muốn xóa người dùng này không?</Typography>
@@ -213,7 +221,7 @@ const User: React.FC = () => {
             Xóa
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

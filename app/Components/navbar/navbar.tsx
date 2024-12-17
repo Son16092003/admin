@@ -8,7 +8,10 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import BusinessIcon from "@mui/icons-material/Business";
 import DescriptionIcon from "@mui/icons-material/Description";
-import PersonIcon from "@mui/icons-material/Person"; // Icon cho nút Quản lý tài khoản
+import BeenhereIcon from '@mui/icons-material/Beenhere';
+import PersonIcon from "@mui/icons-material/Person"; 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import "../../styles/navbar.css";
 
 const Navbar: React.FC = () => {
@@ -36,8 +39,9 @@ const Navbar: React.FC = () => {
       {/* Navbar */}
       <AppBar position="fixed" className="navbar" sx={{ backgroundColor: "#011f82" }}>
         <Toolbar className="navbar-toolbar">
-          <Typography variant="h6">
-            <Link href="/" passHref className="navbar-logo">
+          <Typography variant="h6" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+            <Link href="/" passHref className="navbar-logo" style={{ display: 'flex', alignItems: 'center' }}>
+              <AdminPanelSettingsIcon className="person-icon" />
               ADMIN
             </Link>
           </Typography>
@@ -83,11 +87,11 @@ const Navbar: React.FC = () => {
               <MenuItem onClick={handleClose}>
                 <DescriptionIcon fontSize="small" style={{ marginRight: 8 }} />
                 <Link href="/pages/cv_apply" passHref className="navbar-menu-item">
-                  Các CV đã apply
+                  Các CVs đã apply
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <DescriptionIcon fontSize="small" style={{ marginRight: 8 }} />
+                <BeenhereIcon fontSize="small" style={{ marginRight: 8 }} />
                 <Link href="/pages/jobs_management" passHref className="navbar-menu-item">
                   Các công việc đã tạo
                 </Link>
@@ -127,7 +131,7 @@ const Navbar: React.FC = () => {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <PersonIcon fontSize="small" style={{ marginRight: 8 }} />
+                <SupervisorAccountIcon fontSize="small" style={{ marginRight: 8 }} />
                 <Link href="/pages/recruiter-management" passHref className="navbar-menu-item">
                   Quản lý tài khoản nhà tuyển dụng
                 </Link>

@@ -16,7 +16,17 @@ import {
   Select,
   FormControl,
   InputLabel,
+  TextField,
 } from "@mui/material";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 interface Employer {
   userId: string;
@@ -33,13 +43,22 @@ const Companies: React.FC = () => {
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [categoryCount, setCategoryCount] = useState<Record<string, number>>({});
+  const [searchKeyword, setSearchKeyword] = useState<string>(""); // Từ khóa tìm kiếm
 
   useEffect(() => {
     const fetchEmployers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/employers"); // Thay URL đúng
+        const response = await fetch("http://localhost:3000/employers");
         const data = await response.json();
         setEmployers(data);
+
+        // Tính toán số lượng công ty theo danh mục
+        const countCategories = data.reduce((acc: Record<string, number>, employer: Employer) => {
+          acc[employer.selectedCompany] = (acc[employer.selectedCompany] || 0) + 1;
+          return acc;
+        }, {});
+        setCategoryCount(countCategories);
       } catch (error) {
         console.error("Error fetching employers:", error);
       } finally {
@@ -49,6 +68,11 @@ const Companies: React.FC = () => {
 
     fetchEmployers();
   }, []);
+  const categoryData = Object.entries(categoryCount).map(([name, value]) => ({
+    name,
+    value,
+  }));
+
 
   if (loading) {
     return (
@@ -58,11 +82,18 @@ const Companies: React.FC = () => {
     );
   }
 
+
   // Lọc danh sách employer theo danh mục đã chọn (selectedCompany)
-  const filteredEmployers =
-    selectedCategory === "all"
-      ? employers
-      : employers.filter((employer) => employer.selectedCompany === selectedCategory);
+  const filteredEmployers = employers.filter((employer) => {
+    const matchesCategory =
+      selectedCategory === "all" || employer.selectedCompany === selectedCategory;
+    const matchesSearch =
+      employer.companyName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+      employer.selectedCompany.toLowerCase().includes(searchKeyword.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+
 
   // Lấy danh sách các danh mục công ty (selectedCompany) duy nhất
   const companyCategories = Array.from(new Set(employers.map((employer) => employer.selectedCompany)));
@@ -74,13 +105,15 @@ const Companies: React.FC = () => {
       </Typography>
 
       {/* Dropdown chọn danh mục công ty */}
-      <Box display="flex" justifyContent="center" marginBottom="20px">
-        <FormControl style={{ minWidth: 200 }}>
+      <Box display="flex" justifyContent="center" marginBottom="20px" gap="20px">
+        {/* Dropdown chọn danh mục công ty */}
+        <FormControl variant="outlined" style={{ minWidth: 250 }}>
           <InputLabel id="select-company-category-label">Danh mục</InputLabel>
           <Select
             labelId="select-company-category-label"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
+            label="Danh mục" // Thêm thuộc tính này để khớp với InputLabel
           >
             <MenuItem value="all">Tất cả</MenuItem>
             {companyCategories.map((category) => (
@@ -90,7 +123,19 @@ const Companies: React.FC = () => {
             ))}
           </Select>
         </FormControl>
+
+
+        {/* Ô tìm kiếm */}
+        <TextField
+          label="Tìm kiếm theo tên công ty"
+          variant="outlined"
+          fullWidth
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          sx={{ mb: 3 }}
+        />
       </Box>
+
 
       {/* Bảng hiển thị */}
       <TableContainer component={Paper} style={{ marginTop: "20px" }}>
@@ -121,6 +166,21 @@ const Companies: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Typography variant="h5" align="center" gutterBottom sx={{ marginTop: 4 }}>
+        Phân phối Danh mục Công ty
+      </Typography>
+      <Box sx={{ width: "100%", height: 400 }}>
+        <ResponsiveContainer>
+          <BarChart data={categoryData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="value" fill="#82ca9d" />
+          </BarChart>
+        </ResponsiveContainer>
+      </Box>
+
     </div>
   );
 };
