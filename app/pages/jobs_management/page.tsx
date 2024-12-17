@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -15,6 +15,15 @@ import {
     TextField,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid,
+    ResponsiveContainer,
+} from 'recharts';
 
 interface Job {
     userId: string;
@@ -42,7 +51,8 @@ const JobsManagement: React.FC = () => {
     const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [expandedJob, setExpandedJob] = useState<number | null>(null);
-    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>(''); 
+    const [locationCount, setLocationCount] = useState<Record<string, number>>({});
 
     useEffect(() => {
         const fetchJobs = async () => {
@@ -50,7 +60,14 @@ const JobsManagement: React.FC = () => {
                 const response = await fetch('http://localhost:3000/jobs');
                 const data = await response.json();
                 setJobs(data);
-                setFilteredJobs(data); // Set the initial jobs list
+                setFilteredJobs(data);
+
+                // Tính số lượng công việc theo title
+                const countLocation = data.reduce((acc: Record<string, number>, job: Job) => {
+                    acc[job.location] = (acc[job.location] || 0) + 1;
+                    return acc;
+                }, {});
+                setLocationCount(countLocation);
             } catch (error) {
                 console.error('Error fetching jobs:', error);
             } finally {
@@ -66,16 +83,23 @@ const JobsManagement: React.FC = () => {
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const query = event.target.value;
+        const query = event.target.value.toLowerCase(); // Chuyển query thành chữ thường
         setSearchQuery(query);
 
-        // Lọc công việc theo tên công ty (không phân biệt chữ hoa/thường)
-        const filtered = jobs.filter(
-            (job) =>
-                (job.companyName?.includes(query) || job.company?.includes(query)) // Kiểm tra tên công ty mà không thay đổi chữ hoa/thường
-        );
+        // Lọc công việc theo title, company, hoặc companyName (không phân biệt hoa/thường)
+        const filtered = jobs.filter((job) => {
+            const title = job.title?.toLowerCase() || "";
+            const company = job.company?.toLowerCase() || "";
+            const companyName = job.companyName?.toLowerCase() || "";
+            return title.includes(query) || company.includes(query) || companyName.includes(query);
+        });
         setFilteredJobs(filtered);
     };
+
+    const titleData = Object.entries(locationCount).map(([name, value]) => ({
+        name, // Tiêu đề công việc
+        value, // Số lượng công việc
+    }));
 
     if (loading) {
         return (
@@ -91,9 +115,14 @@ const JobsManagement: React.FC = () => {
                 Quản lý công việc
             </Typography>
 
+            {/* Total number of jobs */}
+            <Typography variant="h6" align="center" color="text.secondary" gutterBottom>
+                Tổng số công việc đã tạo: {jobs.length}
+            </Typography>
+
             {/* Search Box */}
             <TextField
-                label="Tìm kiếm theo tên công ty"
+                label="Tìm kiếm công việc (tiêu đề, công ty)"
                 variant="outlined"
                 fullWidth
                 value={searchQuery}
@@ -133,8 +162,8 @@ const JobsManagement: React.FC = () => {
                                             job.status === 'Mở'
                                                 ? 'success'
                                                 : job.status === 'Tạm dừng'
-                                                ? 'warning'
-                                                : 'default'
+                                                    ? 'warning'
+                                                    : 'default'
                                         }
                                         size="small"
                                     />
@@ -175,6 +204,20 @@ const JobsManagement: React.FC = () => {
                     </Grid>
                 ))}
             </Grid>
+            <Typography variant="h5" align="center" gutterBottom sx={{ marginTop: 4 }}>
+                Phân phối Công Việc Theo danh sách địa điểm
+            </Typography>
+            <Box sx={{ width: '100%', height: 400 }}>
+                <ResponsiveContainer>
+                    <BarChart data={titleData}>
+                        <CartesianGrid strokeDasharray="3 3" /> 
+                        <XAxis dataKey="name" label={{ value: 'Tiêu đề công việc', position: 'insideBottom', offset: -5 }} /> 
+                        <YAxis label={{ value: 'Số lượng', angle: -90, position: 'insideLeft' }} />
+                        <Tooltip />
+                        <Bar dataKey="value" fill="#1976d2" />
+                    </BarChart>
+                </ResponsiveContainer>
+            </Box>
         </Box>
     );
 };
