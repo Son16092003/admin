@@ -1,79 +1,110 @@
-// pages/user-account-management.tsx
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../../styles/UserAccountManagement.css";
+import { Box, TextField, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const CvList: React.FC = () => {
   const [cvs, setCvs] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
+  // Fetch CVs từ API
+  const fetchCvs = async (name: string = '') => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:3000/cv_form/search', {
+        params: { name: searchTerm },
+      });
+      setCvs(response.data);
+    } catch (err: any) {
+      setError('Failed to fetch CVs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Gọi fetchCvs khi component mount
   useEffect(() => {
-    const fetchCvs = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('http://localhost:3000/cv_form');
-        setCvs(response.data);
-      } catch (err: any) {
-        setError('Failed to fetch CVs');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchCvs();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  // Xử lý tìm kiếm
+  const handleSearch = () => {
+    fetchCvs(searchTerm);
+  };
+
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <div className="cv-container">
-      <h1>Danh sách CV</h1>
+    <Box className="cv-container" sx={{ maxWidth: '1200px', margin: '0 auto', padding: 2 }}>
+      <Typography variant="h4" marginBottom={2} align="center">
+        Danh sách CV
+      </Typography>
+
+      {/* Thanh tìm kiếm */}
+      <Box display="flex" justifyContent="center" marginBottom="20px">
+        <TextField
+          label="Tìm kiếm theo tên người dùng"
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          fullWidth
+          sx={{ maxWidth: '400px' }}
+        />
+        <Button variant="contained" onClick={handleSearch} sx={{ marginLeft: 2 }}>
+          Tìm kiếm
+        </Button>
+      </Box>
+
+      {/* Danh sách CV */}
       {cvs.length === 0 ? (
-        <p>Không có CV nào.</p>
+        <Typography align="center">Không có CV nào.</Typography>
       ) : (
-        <table className="cv-table">
-          <thead>
-            <tr>
-              <th>Họ và Tên</th>
-              <th>Email</th>
-              <th>Số Điện Thoại</th>
-              <th>Ngày Sinh</th>
-              <th>Tóm Tắt</th>
-              <th>Chứng Chỉ</th>
-              <th>Trình Độ Học Vấn</th>
-              <th>Kinh Nghiệm</th>
-              <th>Cấp Bậc</th>
-              <th>Kỹ Năng</th>
-              <th>Mong Muốn Công Việc</th>
-              <th>Lương Tối Thiểu</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cvs.map((cv) => (
-              <tr key={cv._id}>
-                <td>{cv.fullName || 'Chưa cung cấp tên'}</td>
-                <td>{cv.email}</td>
-                <td>{cv.phone}</td>
-                <td>{cv.birthDate || 'Chưa cung cấp'}</td>
-                <td>{cv.summary || 'Chưa cung cấp'}</td>
-                <td>{cv.certifications || 'Chưa cung cấp'}</td>
-                <td>{cv.education.educationLevel}</td>
-                <td>{cv.experience.jobTitle || 'Chưa có'}</td>
-                <td>{cv.experience.highestJobLevel || 'Chưa cung cấp'}</td>
-                <td>{cv.skills.join(', ')}</td>
-                <td>{cv.jobPreferences.desiredJobTitle}</td>
-                <td>{cv.jobPreferences.minimumSalary} VND</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }}>
+            <TableHead >
+              <TableRow style={{ backgroundColor: '#011F82'}}>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Họ và Tên</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Email</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Số Điện Thoại</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Ngày Sinh</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Tóm Tắt</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Chứng Chỉ</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Trình Độ Học Vấn</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Kinh Nghiệm</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Cấp Bậc</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Kỹ Năng</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Mong Muốn Công Việc</TableCell>
+                <TableCell style={{ color: 'white', fontSize: '1rem', fontWeight: "bold"}}>Lương Tối Thiểu</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {cvs.map((cv) => (
+                <TableRow key={cv._id}>
+                  <TableCell>{cv.fullName || 'Chưa cung cấp tên'}</TableCell>
+                  <TableCell>{cv.email}</TableCell>
+                  <TableCell>{cv.phone}</TableCell>
+                  <TableCell>{cv.birthDate || 'Chưa cung cấp'}</TableCell>
+                  <TableCell>{cv.summary || 'Chưa cung cấp'}</TableCell>
+                  <TableCell>{cv.certifications || 'Chưa cung cấp'}</TableCell>
+                  <TableCell>{cv.education.educationLevel}</TableCell>
+                  <TableCell>{cv.experience.jobTitle || 'Chưa có'}</TableCell>
+                  <TableCell>{cv.experience.highestJobLevel || 'Chưa cung cấp'}</TableCell>
+                  <TableCell>{cv.skills.join(', ')}</TableCell>
+                  <TableCell>{cv.jobPreferences.desiredJobTitle}</TableCell>
+                  <TableCell>{cv.jobPreferences.minimumSalary} VND</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+    </Box>
   );
-  
 };
 
 export default CvList;
