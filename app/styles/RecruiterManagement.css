@@ -2,49 +2,64 @@
 .recruiter-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px;
   background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
 }
 
 /* Tiêu đề chính */
-.recruiter-container h1 {
+.recruiter-container h4 {
   font-size: 2rem;
-  color: #011F82; /* Màu chủ đạo */
+  color: #011F82;
   text-align: center;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 /* Thanh tìm kiếm */
 .search-bar {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.search-bar .MuiFormControl-root {
+  min-width: 150px;
 }
 
 .search-bar input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #6D92D0;
-  border-radius: 5px;
-  outline: none;
+  /* padding: 12px 15px; */
+  /* border: none; */
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-bar input:focus {
+  border-color: #011F82;
+  box-shadow: 0 0 5px rgba(1, 31, 130, 0.5);
 }
 
 .search-bar button {
-  padding: 10px 20px;
+  padding: 14px 20px;
   background-color: #6D92D0;
   color: #ffffff;
   border: none;
-  border-radius: 5px;
-  margin-left: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  /* font-weight: bold; */
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .search-bar button:hover {
-  background-color: #6D92D0;
+  background-color: #011F82;
+  transform: scale(1.05);
 }
 
 /* Bảng thông tin */
@@ -52,28 +67,34 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .recruiter-table th {
   background-color: #011F82;
   color: #ffffff;
   text-align: left;
-  padding: 10px;
+  padding: 15px;
+  font-size: 1rem;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
 .recruiter-table td {
-  padding: 10px;
-  border: 1px solid #dddddd;
+  padding: 12px 15px;
+  border: 1px solid #B9D6F3;
+  font-size: 0.95rem;
+  color: #333333;
 }
 
 .recruiter-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #f9f9f9;
 }
 
 .recruiter-table tr:hover {
   background-color: #e6f2ff;
+  cursor: pointer;
 }
 
 /* Thông báo không có dữ liệu */
@@ -82,4 +103,24 @@
   font-size: 1.2rem;
   color: #6D92D0;
   margin-top: 20px;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .recruiter-table th,
+  .recruiter-table td {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
 }
