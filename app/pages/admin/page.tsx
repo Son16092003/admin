@@ -22,6 +22,7 @@ const User: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        console.log('Trạng thái đăng nhập:', localStorage.getItem("isAuthenticated"));
         const fetchUsers = async () => {
             try {
                 const response = await fetch("http://localhost:3000/user"); // URL API của backend NestJS

@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../styles/login.css';
-import { useRouter } from 'next/navigation'; // Đúng module cho App Router
+import { useRouter } from 'next/navigation';
 
 type LoginFormInputs = {
   username: string;
@@ -12,13 +12,22 @@ type LoginFormInputs = {
 
 export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
-  const router = useRouter(); // Lấy instance của useRouter
+  const router = useRouter();
+
+  // Xóa trạng thái đăng nhập khi ứng dụng khởi chạy
+  useEffect(() => {
+    localStorage.removeItem("isAuthenticated");
+    console.log('Trạng thái đăng nhập đã bị xóa.');
+    console.log('Trạng thái đăng nhập:', localStorage.getItem("isAuthenticated"));
+  }, []);
+  
 
   const onSubmit = (data: LoginFormInputs) => {
+    console.log('Dữ liệu đăng nhập:', data);
     if (data.username === 'admin' && data.password === 'admin') {
       console.log('Đăng nhập thành công');
-      localStorage.setItem("isAuthenticated", "true"); // Set authentication status
-      router.push('/admin'); // Điều hướng đến trang Admin
+      localStorage.setItem("isAuthenticated", "true");
+      router.push('/');
     } else {
       alert('Sai tên đăng nhập hoặc mật khẩu');
     }
@@ -32,13 +41,21 @@ export default function LoginPage() {
       <div className="main">
         <div className="userName">
           <p>Tên đăng nhập</p>
-          <input type="text" placeholder="Tên đăng nhập" {...register('username', { required: true })} />
+          <input 
+            type="text" 
+            placeholder="Tên đăng nhập" 
+            {...register('username', { required: "Vui lòng nhập tên đăng nhập" })} 
+          />
           {errors.username && <p>{errors.username.message}</p>}
         </div>
 
         <div className="password">
           <p>Mật khẩu</p>
-          <input type="password" placeholder="Mật khẩu" {...register('password', { required: true })} />
+          <input 
+            type="password" 
+            placeholder="Mật khẩu" 
+            {...register('password', { required: "Vui lòng nhập mật khẩu" })} 
+          />
           {errors.password && <p>{errors.password.message}</p>}
         </div>
 

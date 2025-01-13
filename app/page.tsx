@@ -6,6 +6,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import WorkIcon from '@mui/icons-material/Work';
 import BusinessIcon from '@mui/icons-material/Business';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import { useRouter } from 'next/navigation';
 
 export default function Home({ children }: { children: React.ReactNode }) {
   const [userCount, setUserCount] = useState<number>(0);
@@ -13,20 +14,29 @@ export default function Home({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null);
   const [applications, setApplications] = useState<number[]>([]);
   const [jobs, setJobs] = useState<number[]>([]);
-  
+  const router = useRouter();
+
   useEffect(() => {
-    // Fetch logged-in user data
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+
+    // Nếu chưa đăng nhập, điều hướng về trang login
+    if (!isAuthenticated) {
+      router.push('/pages/login');
+      return;
+    }
+
+    // Nếu đã đăng nhập, tải dữ liệu người dùng và các thông tin cần thiết
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
 
-    // Fetch user count from API
+    // Fetch dữ liệu từ API
     const fetchUserCount = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user"); // Adjust URL if needed
+        const response = await fetch("http://localhost:3000/user"); // Đổi URL nếu cần
         const users = await response.json();
-        setUserCount(users.length); // Assuming `users` is an array of all users
+        setUserCount(users.length);
       } catch (error) {
         console.error("Error fetching user count:", error);
       }
@@ -34,20 +44,19 @@ export default function Home({ children }: { children: React.ReactNode }) {
 
     const fetchApplications = async () => {
       try {
-        const response = await fetch("http://localhost:3000/applications"); // Adjust URL if needed
+        const response = await fetch("http://localhost:3000/applications"); // Đổi URL nếu cần
         const applications = await response.json();
         setApplications(applications.length);
       } catch (error) {
         console.error("Error fetching applications:", error);
       }
-    }
+    };
 
-    // Fetch company count from API
     const fetchCompanyCount = async () => {
       try {
-        const response = await fetch("http://localhost:3000/employers"); // Adjust URL if needed
+        const response = await fetch("http://localhost:3000/employers"); // Đổi URL nếu cần
         const companies = await response.json();
-        setCompanyCount(companies.length); // Assuming `companies` is an array of all companies
+        setCompanyCount(companies.length);
       } catch (error) {
         console.error("Error fetching company count:", error);
       }
@@ -55,19 +64,20 @@ export default function Home({ children }: { children: React.ReactNode }) {
 
     const fetchJobs = async () => {
       try {
-        const response = await fetch("http://localhost:3000/jobs"); // Adjust URL if needed
+        const response = await fetch("http://localhost:3000/jobs"); // Đổi URL nếu cần
         const jobs = await response.json();
-        setJobs(jobs.length); // Assuming `jobs` is an array of all jobs
+        setJobs(jobs.length);
       } catch (error) {
         console.error("Error fetching job count:", error);
       }
-    }
+    };
 
     fetchUserCount();
     fetchCompanyCount();
     fetchApplications();
     fetchJobs();
-  }, []);
+  }, [router]);
+
 
 
   const pages = [

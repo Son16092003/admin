@@ -2,7 +2,7 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./Components/navbar/navbar";
+import Navbar from "./components/navbar/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        
         <div className="min-h-screen flex flex-col">
           {/* Navbar luôn cố định ở trên */}
           <Navbar />
