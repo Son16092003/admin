@@ -89,9 +89,9 @@ export default function Home({ children }: { children: React.ReactNode }) {
 
   const statistics = [
     { title: "Người dùng đăng nhập", value: userCount, icon: <PeopleIcon color="secondary" fontSize="large" /> },
+    { title: "Công việc đã tạo", value: jobs, icon: <BarChartIcon color="secondary" fontSize="large" /> },
     { title: "Công ty đã tạo", value: companyCount, icon: <BusinessIcon color="secondary" fontSize="large" /> },
     { title: "Người tìm việc đã nộp CV", value: applications, icon: <WorkIcon color="secondary" fontSize="large" /> },
-    { title: "Công việc đã tạo", value: jobs, icon: <BarChartIcon color="secondary" fontSize="large" /> },
   ];
   return (
     <Box sx={{ bgcolor: "#f9fafb", minHeight: "100vh", p: 4 }}>
